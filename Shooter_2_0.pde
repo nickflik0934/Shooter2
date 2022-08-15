@@ -1,8 +1,9 @@
 
 void setup() {
   size(600, 600, P2D);
+  frameRate(60);
   debug = true;
-  
+
   setupKeys();
   setupFlags();
   setupPlayer();
@@ -13,18 +14,18 @@ void setup() {
 
 void draw() {
   switch(flags.get("gamestate")) {
-    case "game": // User is in game.
-      gameScene.update();
-      gameScene.render();
+  case "game": // User is in game.
+    gameScene.update();
+    gameScene.render();
     break;
-    case "build": // User is building their ship.
-      buildScene.update();
-      buildScene.render();
+  case "build": // User is building their ship.
+    buildScene.update();
+    buildScene.render();
     break;
-    case "menu": // User is building their ship.
+  case "menu": // User is building their ship.
     break;
   }
-  if(debug) {
+  if (debug) {
     debug();
   }
 }
@@ -32,7 +33,10 @@ void draw() {
 void mousePressed() {
   buildScene.click(mouseX, mouseY);
   gameScene.click(mouseX, mouseY);
-  if(mouseButton == CENTER) {
-    
+  if (mouseButton == CENTER) {
   }
+}
+
+float clamp(float a, float min, float max) {
+  return a < min ? min : a > max ? max : a;
 }

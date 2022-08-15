@@ -5,14 +5,14 @@ StringDict DEBUG_TEXT_MAPPING;
 void setupDebug() {
   DEBUG_TEXT_MAPPING = new StringDict();
   String[][] keyMap = new String[][]{
-    new String[]{"w", "W"},
-    new String[]{"a", "A"},
-    new String[]{"s", "S"},
-    new String[]{"d", "D"},
+    new String[]{"w", "W"}, 
+    new String[]{"a", "A"}, 
+    new String[]{"s", "S"}, 
+    new String[]{"d", "D"}, 
     new String[]{str(ESC), "^"}
   };
-  
-  for(int i = 0; i < keyMap.length; i++) {
+
+  for (int i = 0; i < keyMap.length; i++) {
     DEBUG_TEXT_MAPPING.set(keyMap[i][0], keyMap[i][1]);
   }
 }
@@ -22,12 +22,12 @@ int DEBUG_TEXT_LEVEL_LEFT;
 int DEBUG_TEXT_LEVEL_RIGHT;
 void debugText(String title, String text, Boolean left) {
   textAlign(left ? LEFT : RIGHT, TOP);
-  
+
   float x = left ? textWidth(title) : width;
   float y = left ? 12 * DEBUG_TEXT_LEVEL_LEFT : 12 * DEBUG_TEXT_LEVEL_RIGHT;
-  
+
   text(text, x, y);
-  if(left) {
+  if (left) {
     DEBUG_TEXT_LEVEL_LEFT++;
     text(title, 0, y);
   } else {
@@ -37,7 +37,7 @@ void debugText(String title, String text, Boolean left) {
 }
 
 void fill(int[] colors) {
-  if(colors.length == 1) {
+  if (colors.length == 1) {
     fill(colors[0]);
   } else {
     fill(colors[0], colors[1], colors[2]);
@@ -63,7 +63,7 @@ void debug() {
   textSize(12);
   DEBUG_TEXT_LEVEL_LEFT = 0;
   DEBUG_TEXT_LEVEL_RIGHT = 0;
-  
+
   debugFps();
   debugKeysK();
   debugKeysV();
@@ -74,7 +74,7 @@ void debug() {
 void debugFps() {
   String text = nf(frameRate, 0, 1);
   String title = "Fps: ";
-  
+
   debugText(title, text, true);
 }
 
@@ -83,7 +83,7 @@ void debugKeysK() {
   String[] array = keys.keyArray();
   String text = "";
   String title = "K: ";
-  for(int i = 0; i < array.length; i++) {
+  for (int i = 0; i < array.length; i++) {
     text = text + DEBUG_TEXT_MAPPING.get(array[i]);
   }
   debugText(title, text, false);
@@ -94,7 +94,7 @@ void debugKeysV() {
   String[] array = keys.keyArray();
   String text = "";
   String title = "V: ";
-  for(int i = 0; i < array.length; i++) {
+  for (int i = 0; i < array.length; i++) {
     text = text + nf(keys.get(array[i]), 0, 0);
   }
   debugText(title, text, false);
