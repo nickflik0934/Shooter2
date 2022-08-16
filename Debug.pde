@@ -36,14 +36,6 @@ void debugText(String title, String text, Boolean left) {
   }
 }
 
-void fill(int[] colors) {
-  if (colors.length == 1) {
-    fill(colors[0]);
-  } else {
-    fill(colors[0], colors[1], colors[2]);
-  }
-}
-
 void textBorder(String text, float x, float y, int[] fillA, int[] fillB) {
   fill(fillA);
   textSize(15);

@@ -1,27 +1,20 @@
 
 class BuildScene {
 
-  UIFrame buildMenu;
-
   BuildScene() {
-    this.buildMenu = new UIFrame(120, 200, 10, 10, false, true);
+    this.setupBuildMenu();
+  }
 
-    ArrayList<UIFrame>children = new ArrayList<UIFrame>();
+  UIFrame buildMenu;
+  
+  UIFrame buildMenuTooltip;
 
-    int blockCount = 18;
-    int rowCount = 3;
-
-    float spacing = 100/rowCount;
-    for (int i = 0; i < blockCount; i++) {
-      float offsetX = 100/rowCount*(i%rowCount);
-      float offsetY = 100/rowCount*floor(i/rowCount);
-
-      UIFrame child = new UIFrame(this.buildMenu, offsetX, offsetY, spacing, spacing);
-
-      children.add(child);
-    }
-
-    this.buildMenu.children = children;
+  void setupBuildMenu() {
+    this.buildMenu = new UIFrame(120, 200, 10, 5, 5, false, true);
+    this.buildMenuTooltip = new UIFrame(250, 300, 10, 5, 5);
+    
+    JSONArray values = blockData.getJSONArray("blocks");
+    this.buildMenu.addBlockData(values);
   }
 
   void update() {
@@ -56,49 +49,65 @@ class BuildScene {
     strokeWeight(1);
   }
 
-  public class UIFrame {
+  // Outlines the item that the user is hovering over.
+  UIFrame renderHoverBuildMenu() {
+    if (!this.buildMenu.click(mouseX, mouseY))
+      return null;
 
-    UIFrame parent;
-    float x, y, w, h, padding, margin;
-    Boolean left, bottom;
-    ArrayList<UIFrame> children;
+    UIFrame out = null;
+    stroke(255, 0, 0);
+    strokeWeight(2);
+    for (UIFrame child : this.buildMenu.children) {
+      if (!child.click(mouseX, mouseY))
+        continue;
 
-    int blockCount, rowCount;
-
-    UIFrame(UIFrame parent, float x, float y, float w, float h) {
-      this.parent = parent;
-      this.x = x;
-      this.y = y;
-      this.w = w;
-      this.h = h;
+      this.buildMenu.renderChild(child);
+      out = child;
+      break;
     }
-
-    UIFrame(float w, float h, float padding, float margin, Boolean left, Boolean top) {
-      this.w = w;
-      this.h = h;
-      this.padding = padding;
-      this.margin = margin;
-      this.x = left ? this.w+this.padding : width-this.w-this.padding;
-      this.y = top ? this.h+this.padding : height-this.h-this.padding;
-    }
-
-    void render() {
-      if(parent != null)
-        return;
+    stroke(0);
+    strokeWeight(1);
+    return out;
+  }
+  
+  void renderItemData(UIFrame item) {
+    if(item == null)
+      return;
       
-      rect(this.x, this.y, this.w, this.h);
+    JSONObject data = item.data;
+    if(data == null)
+      return;
+    
+    float x = mouseX-this.buildMenu.padding-this.buildMenuTooltip.w;
+    float y = mouseY;
+    
+    fill(255);
+    this.buildMenuTooltip.updatePosition(x, y);
+    this.buildMenuTooltip.render();
+    
+    String[] order = blockData.getJSONArray("displayOrder").getStringArray();
+    JSONObject display = blockData.getJSONObject("display");
+    ArrayList<String> labels = new ArrayList<String>();
+    ArrayList<String> values = new ArrayList<String>();
+    float longestLabel = 0;
+    for(int i = 0; i < order.length; i++) {
+      Object piece = data.get(order[i]);
+      if(piece == null)
+        continue;
       
-      clip(x, y, w, h);
-      float scroll = millis();
-      for (UIFrame child : this.children) {
-        rect(this.x+child.x*this.w, y+child.y*this.w + (-1+sin(scroll/1000))*85, child.w*this.w, child.h*this.w);
-      }
-      noClip();
+      JSONObject field = display.getJSONObject(order[i]);
+      String label = field.getJSONObject("label").getString("en");
+      
+      String value = piece.toString();
+      
+      longestLabel = max(longestLabel, textWidth(label));
+      
+      labels.add(label + ": ");
+      values.add(value);
     }
-
-    Boolean click(float x, float y) {
-      return Click(x, y, this.x, this.y, this.w, this.h);
-    }
+    
+    this.buildMenuTooltip.renderText(labels.toArray(new String[labels.size()]));
+    this.buildMenuTooltip.renderText(values.toArray(new String[values.size()]), 5+longestLabel);
   }
 
   void render() {
@@ -113,13 +122,19 @@ class BuildScene {
     this.hover();
 
     this.buildMenu.render();
-
-    // Check if stuff is in center 
-    //rect(0,0,250,600);
-    //rect(350,0,250,600);
+    
+    UIFrame item = this.renderHoverBuildMenu();
+    this.renderItemData(item);
   }
-
   void click(float x, float y) {
+    if (!this.buildMenu.click(x, y))
+      return;
+
+    ArrayList<UIFrame> children = this.buildMenu.children;
+    for (UIFrame child : children) {
+      if (!child.click(x, y)) {
+      }
+    }
   }
 }
 

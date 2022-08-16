@@ -1,0 +1,65 @@
+{
+    "displayOrder" : [
+        "name",
+        "description",
+        "hp",
+        "stats"
+    ],
+    "display" : {
+        "name" : {
+            "label" : {
+                "en" : "Name"
+            },
+            "type" : "string",
+            "title" : true
+        },
+        "description" : {
+            "label" : {
+                "en" : "Description"
+            },
+            "type" : "string"
+        },
+        "hp" : {
+            "label" : {
+                "en" : "Hp"
+            },
+            "type" : "int"
+        },
+        "stats" : {
+            "label" : {
+                "en" : "Stats"
+            },
+            "type" : "object"
+        }
+    },
+    "blocks" : [
+        {
+            "name" : "Hull",
+            "description" : "Sturdy against most damage types. Once destroyed, it will not come back.",
+            "hp" : 10
+        },
+        {
+            "name" : "Weapon",
+            "description" : "It goes pew.",
+            "hp" : 25,
+            "stats" : {
+                "damage" : 25,
+                "fireRate" : 1,
+                "projectile" : 0,
+                "weeeee" : "weeeee"
+            }
+        },
+        {
+            "name" : "Shield",
+            "description" : "Hexproofing but different.",
+            "hp" : 2,
+            "stats" : {
+                "hp" : 250,
+                "rechargeRate" : 4,
+                "range" : 75,
+                "width" : 75,
+                "depth" : 10
+            }
+        }
+    ]
+}

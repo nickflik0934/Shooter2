@@ -1,8 +1,11 @@
+import java.util.*;
 
 void setup() {
   size(600, 600, P2D);
   frameRate(60);
   debug = true;
+  
+  loadFiles();
 
   setupKeys();
   setupFlags();
@@ -35,8 +38,4 @@ void mousePressed() {
   gameScene.click(mouseX, mouseY);
   if (mouseButton == CENTER) {
   }
-}
-
-float clamp(float a, float min, float max) {
-  return a < min ? min : a > max ? max : a;
 }
