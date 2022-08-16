@@ -28,7 +28,7 @@ class BuildScene {
       return;
     }
 
-    float x = data.x;
+    float x = data.x; 
     float y = data.y;
 
     pushMatrix();
