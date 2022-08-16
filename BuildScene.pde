@@ -6,13 +6,13 @@ class BuildScene {
   }
 
   UIFrame buildMenu;
-  
+
   UIFrame buildMenuTooltip;
 
   void setupBuildMenu() {
     this.buildMenu = new UIFrame(120, 200, 10, 5, 5, false, true);
     this.buildMenuTooltip = new UIFrame(250, 300, 10, 5, 5);
-    
+
     JSONArray values = blockData.getJSONArray("blocks");
     this.buildMenu.addBlockData(values);
   }
@@ -69,45 +69,44 @@ class BuildScene {
     strokeWeight(1);
     return out;
   }
-  
+
   void renderItemData(UIFrame item) {
-    if(item == null)
+    if (item == null)
       return;
-      
+
     JSONObject data = item.data;
-    if(data == null)
+    if (data == null)
       return;
-    
+
     float x = mouseX-this.buildMenu.padding-this.buildMenuTooltip.w;
     float y = mouseY;
-    
+
     fill(255);
     this.buildMenuTooltip.updatePosition(x, y);
     this.buildMenuTooltip.render();
-    
+
     String[] order = blockData.getJSONArray("displayOrder").getStringArray();
     JSONObject display = blockData.getJSONObject("display");
-    ArrayList<String> labels = new ArrayList<String>();
-    ArrayList<String> values = new ArrayList<String>();
-    float longestLabel = 0;
-    for(int i = 0; i < order.length; i++) {
+    
+    TextPiece[] textPieces = new TextPiece[0];
+    for (int i = 0; i < order.length; i++) {
       Object piece = data.get(order[i]);
-      if(piece == null)
+      if (piece == null)
         continue;
-      
+
       JSONObject field = display.getJSONObject(order[i]);
-      String label = field.getJSONObject("label").getString("en");
-      
+      if (field == null)
+        continue;
+
       String value = piece.toString();
-      
-      longestLabel = max(longestLabel, textWidth(label));
-      
-      labels.add(label + ": ");
-      values.add(value);
+      String label = field.getJSONObject("label").getString("en");
+
+      TextPiece textPiece = new TextPiece(label, value);
+      textPieces = (TextPiece[])append(textPieces, textPiece);
     }
     
-    this.buildMenuTooltip.renderText(labels.toArray(new String[labels.size()]));
-    this.buildMenuTooltip.renderText(values.toArray(new String[values.size()]), 5+longestLabel);
+    TextArea textArea = new TextArea(this.buildMenuTooltip, textPieces);
+    textArea.render();
   }
 
   void render() {
@@ -122,7 +121,7 @@ class BuildScene {
     this.hover();
 
     this.buildMenu.render();
-    
+
     UIFrame item = this.renderHoverBuildMenu();
     this.renderItemData(item);
   }

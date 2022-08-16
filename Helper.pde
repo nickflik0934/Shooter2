@@ -31,6 +31,11 @@ void rect(float[] data) {
   rect(data[0], data[1], data[2], data[3]);
 }
 
+float textSize = 12;
+void setTextSize(float newTextSize) {
+  textSize = newTextSize;
+}
+
 
 
 JSONObject blockDisplayOrder;

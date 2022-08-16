@@ -9,10 +9,10 @@ public class UIFrame {
   Boolean active = true;
 
   int blockCount, rowCount;
-  
+
   void addBlockData(JSONArray values) {
     ArrayList<UIFrame>children = new ArrayList<UIFrame>();
-    
+
     int rowCount = 3;
     float spacing = 100/rowCount;
     for (int i = 0; i < values.size(); i++) {
@@ -69,7 +69,7 @@ public class UIFrame {
     this.w = w/100;
     this.h = h/100;
   }
-  
+
   void updatePosition(float x, float y) {
     this.x = x;
     this.y = y;
@@ -83,33 +83,23 @@ public class UIFrame {
 
     return new float[]{x, y, child.w*w-this.spacing, child.h*w-this.spacing};
   }
-  
+
   void renderChildren() {
-    if(this.children == null)
+    if (this.children == null)
       return;
-      
+
     fill(255);
     for (UIFrame child : this.children) {
       this.renderChild(child);
     }
   }
   
-  void renderText(HashMap<String, Object> map) {
-    int offsetX = 0;
-    int offsetY = 0;
-    int textSize = 12;
+  void renderText(String text) {
     textAlign(LEFT, TOP);
     fill(0);
-    for(int i = 0; i < map.size(); i++) {
-      Set<String> a = map.keySet();
-      println(a);
-      //float x = this.x+this.margin/2;
-      //float y = this.y+this.margin/2+textSize*index;
-      //text(text, x+offsetX, y, this.w-this.margin/2-offsetX, this.h-margin/2);
-      //offsetY+=a.lineCount*12;
-    }
+    text(text, x+this.margin/2, y+this.margin/2, this.w-this.margin/2, this.h-margin/2);
   }
-  
+
   void renderChild(UIFrame child) {
     clip(this.x, this.y, this.w, this.h);
     float[] data = this.calculateFrame(child);
@@ -120,12 +110,12 @@ public class UIFrame {
   void render() {
     if (!this.active)
       return;
-      
+
     if (parent != null)
       return;
 
     rect(this.x, this.y, this.w, this.h);
-    
+
     this.renderChildren();
 
     //float scroll = millis();
@@ -134,7 +124,7 @@ public class UIFrame {
   Boolean click(float x, float y) {
     if (parent == null)
       return Click(x, y, this.x, this.y, this.w, this.h);
-     
+
     return ClickChild(x, y, this.parent, this);
   }
 }
